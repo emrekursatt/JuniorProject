@@ -45,12 +45,6 @@ func main() {
 
 	UserRepositoryDB := repository.NewUserRepository(database)
 	us := api.UserHandler{Service: services.NewUserService(&UserRepositoryDB)}
-	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "templates/register.html")
-	})
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "templates/login.html")
-	})
 	http.HandleFunc("/api/user/register", us.Insert)
 	http.HandleFunc("/api/user/delete", us.Delete)
 	http.HandleFunc("/api/user/update", us.UpdatePassword)
