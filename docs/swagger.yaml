@@ -112,28 +112,6 @@ paths:
       summary: Add a new task
       tags:
       - tasks
-  /user/create:
-    post:
-      consumes:
-      - application/json
-      description: add by json user
-      parameters:
-      - description: Add User
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/models.UserEntity'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.UserEntity'
-      summary: Add a new user
-      tags:
-      - users
   /user/delete:
     delete:
       consumes:
@@ -161,6 +139,50 @@ paths:
       consumes:
       - application/json
       description: add by json user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserEntity'
+      summary: Add a new user
+      tags:
+      - users
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: add by json user
+      parameters:
+      - description: Update User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserEntity'
+      summary: Add a new user
+      tags:
+      - users
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: add by json user
+      parameters:
+      - description: Add User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserEntity'
       produces:
       - application/json
       responses:

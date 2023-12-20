@@ -18,7 +18,7 @@ type UserHandler struct {
 // @Produce  json
 // @Param   user     body    models.UserEntity     true  "Add User"
 // @Success 200 {object}  models.UserEntity
-// @Router /user/create [post]
+// @Router /user/register [post]
 func (h UserHandler) Insert(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
@@ -47,6 +47,7 @@ func (h UserHandler) Insert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	json.NewEncoder(w).Encode(result)
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -155,5 +156,45 @@ func (h UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(users)
+	w.WriteHeader(http.StatusOK)
+}
+
+// @Summary Add a new user
+// @Description add by json user
+// @Tags users
+// @Accept  json
+// @Produce  json
+// @Param   user     body    models.UserEntity     true  "Update User"
+// @Success 200 {object} models.UserEntity
+// @Router /user/login [POST]
+func (h UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != "POST" {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var user models.UserEntity
+
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+
+		}
+	}
+
+	result, err := h.Service.Login(user)
+	if err != nil || result.Status == false {
+		errMsg := "Internal Server Error"
+		if err != nil {
+			errMsg = err.Error()
+		}
+		http.Error(w, errMsg, http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(result)
 	w.WriteHeader(http.StatusOK)
 }

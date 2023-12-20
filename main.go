@@ -45,10 +45,17 @@ func main() {
 
 	UserRepositoryDB := repository.NewUserRepository(database)
 	us := api.UserHandler{Service: services.NewUserService(&UserRepositoryDB)}
-	http.HandleFunc("/api/user/create", us.Insert)
+	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "templates/register.html")
+	})
+	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "templates/login.html")
+	})
+	http.HandleFunc("/api/user/register", us.Insert)
 	http.HandleFunc("/api/user/delete", us.Delete)
 	http.HandleFunc("/api/user/update", us.UpdatePassword)
 	http.HandleFunc("/api/user/getAll", us.GetAllUsers)
+	http.HandleFunc("/api/user/login", us.Login)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -61,19 +68,3 @@ func main() {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 
 }
-
-//http.HandleFunc("/", indexHandler)
-////http.HandleFunc("/tasks", taskController.GetAllTasks)
-//
-
-//func indexHandler(w http.ResponseWriter, r *http.Request) {
-//	if r.URL.Path != "/" {
-//		http.NotFound(w, r)
-//		return
-//	}
-//	_, err := fmt.Fprint(w, "Hello, World!")
-//	if err != nil {
-//		w.WriteHeader(http.StatusInternalServerError)
-//
-//	}
-//}

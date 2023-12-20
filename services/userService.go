@@ -5,6 +5,8 @@ import (
 	"github.com/emrekursatt/JuniorProject/dto"
 	"github.com/emrekursatt/JuniorProject/models"
 	"github.com/emrekursatt/JuniorProject/repository"
+	"log"
+	"strconv"
 )
 
 type DefaultUserService struct {
@@ -16,6 +18,7 @@ type UserService interface {
 	Delete(user models.UserEntity) (*dto.UserDTO, error)
 	UpdatePassword(user models.UserEntity) (*dto.UserDTO, error)
 	GetAllUsers() ([]models.UserEntity, error)
+	Login(user models.UserEntity) (*dto.UserDTO, error)
 }
 
 func NewUserService(repo repository.UserRepository) DefaultUserService {
@@ -24,16 +27,16 @@ func NewUserService(repo repository.UserRepository) DefaultUserService {
 
 func (u DefaultUserService) Insert(user models.UserEntity) (*dto.UserDTO, error) {
 	userDTO := dto.UserDTO{}
-
 	var entityExist, err = u.Repo.IsAlreadyUserEntityExist(user)
 	if entityExist {
 		userDTO.Status = false
-		return &userDTO, err
+		log.Println(err)
+		return &userDTO, errors.New("User Already Exist : " + user.UserName)
 
 	} else if user.UserName == "" || user.Password == "" || user.Email == "" {
 		userDTO.Status = false
 		return &userDTO, errors.New("Username or Password or Email Not Valid : " + "User Name : " + user.UserName + " Password :" + user.Password + " Email :" + user.Email)
-	} else if len(user.Password) < 10 {
+	} else if len(strconv.Itoa(user.PhoneNumber)) < 10 {
 		userDTO.Status = false
 		return &userDTO, errors.New("Please enter the telephone number with 10 digits without leading zeros.")
 	}
@@ -41,6 +44,7 @@ func (u DefaultUserService) Insert(user models.UserEntity) (*dto.UserDTO, error)
 	result, err := u.Repo.Insert(user)
 
 	if err != nil || result == false {
+		log.Println(err)
 		userDTO.Status = false
 		return &userDTO, err
 	}
@@ -54,13 +58,15 @@ func (u DefaultUserService) Delete(user models.UserEntity) (*dto.UserDTO, error)
 
 	var entityExist, err = u.Repo.IsAlreadyUserEntityExist(user)
 	if entityExist == false {
+		log.Println(err)
 		userDTO.Status = false
-		return &userDTO, err
+		return &userDTO, errors.New("User Not Found")
 	}
 
 	result, err := u.Repo.Delete(user)
 
 	if err != nil || result == false {
+		log.Println(err)
 		userDTO.Status = false
 		return &userDTO, err
 	}
@@ -75,7 +81,7 @@ func (u DefaultUserService) UpdatePassword(user models.UserEntity) (*dto.UserDTO
 	var entityExist, err = u.Repo.IsAlreadyUserEntityExist(user)
 	if entityExist == false {
 		userDTO.Status = false
-		return &userDTO, err
+		return &userDTO, errors.New("User Not Found")
 	}
 
 	result, err := u.Repo.UpdatePassword(user)
@@ -95,8 +101,22 @@ func (u DefaultUserService) GetAllUsers() ([]models.UserEntity, error) {
 	users, err := u.Repo.GetAllUsers()
 
 	if err != nil {
+		log.Println(err)
 		return users, err
 	}
 
 	return users, nil
+}
+
+func (u DefaultUserService) Login(user models.UserEntity) (*dto.UserDTO, error) {
+	userDTO := dto.UserDTO{}
+
+	var entityExist, err = u.Repo.Login(user)
+	if entityExist == false {
+		log.Println(err)
+		userDTO.Status = false
+		return &userDTO, errors.New("User Not Found")
+	}
+	userDTO.Status = true
+	return &userDTO, nil
 }
