@@ -1,0 +1,196 @@
+basePath: /api
+definitions:
+  models.TaskEntity:
+    properties:
+      code:
+        type: string
+      description:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+    type: object
+  models.UserEntity:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: integer
+      userName:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server Petstore server.
+  title: Swagger Example API
+  version: v1
+paths:
+  /task/create:
+    post:
+      consumes:
+      - application/json
+      description: add by json task
+      parameters:
+      - description: Add Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/models.TaskEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TaskEntity'
+      summary: Add a new task
+      tags:
+      - tasks
+  /task/delete:
+    delete:
+      consumes:
+      - application/json
+      description: add by json task
+      parameters:
+      - description: Delete Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/models.TaskEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TaskEntity'
+      summary: Add a new task
+      tags:
+      - tasks
+  /task/getAll:
+    get:
+      consumes:
+      - application/json
+      description: add by json task
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskEntity'
+            type: array
+      summary: Add a new task
+      tags:
+      - tasks
+  /task/update:
+    put:
+      consumes:
+      - application/json
+      description: add by json task
+      parameters:
+      - description: Update Task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/models.TaskEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TaskEntity'
+      summary: Add a new task
+      tags:
+      - tasks
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: add by json user
+      parameters:
+      - description: Add User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserEntity'
+      summary: Add a new user
+      tags:
+      - users
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: add by json user
+      parameters:
+      - description: Delete User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserEntity'
+      summary: Add a new user
+      tags:
+      - users
+  /user/getAll:
+    get:
+      consumes:
+      - application/json
+      description: add by json user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserEntity'
+      summary: Add a new user
+      tags:
+      - users
+  /user/update:
+    put:
+      consumes:
+      - application/json
+      description: add by json user
+      parameters:
+      - description: Update User
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserEntity'
+      summary: Add a new user
+      tags:
+      - users
+swagger: "2.0"
