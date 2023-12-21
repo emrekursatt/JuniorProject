@@ -15,7 +15,7 @@ type DefaultTaskService struct {
 
 type TaskService interface {
 	Insert(task models.TaskEntity) (*dto.TaskDTO, error)
-	Delete(task models.TaskEntity) (*dto.TaskDTO, error)
+	Delete(code string) (*dto.TaskDTO, error)
 	Update(task models.TaskEntity) (*dto.TaskDTO, error)
 	GetAllTasks() ([]models.TaskEntity, error)
 }
@@ -27,7 +27,7 @@ func NewTaskService(repo repository.TaskRepository) DefaultTaskService {
 func (t DefaultTaskService) Insert(task models.TaskEntity) (*dto.TaskDTO, error) {
 	taskDTO := dto.TaskDTO{}
 
-	var entityExist, err = t.Repo.IsAlreadyTaskEntityExist(task)
+	var entityExist, err = t.Repo.IsAlreadyTaskEntityExist(task.Code)
 	if entityExist {
 		log.Println("Task Code Already Exist : " + task.Code)
 		taskDTO.Status = false
@@ -52,47 +52,47 @@ func (t DefaultTaskService) Insert(task models.TaskEntity) (*dto.TaskDTO, error)
 
 }
 
-func (t DefaultTaskService) Delete(task models.TaskEntity) (*dto.TaskDTO, error) {
+func (t DefaultTaskService) Delete(code string) (*dto.TaskDTO, error) {
 	taskDTO := dto.TaskDTO{}
 
-	var entityExist, err = t.Repo.IsAlreadyTaskEntityExist(task)
+	var entityExist, err = t.Repo.IsAlreadyTaskEntityExist(code)
 	if entityExist == false {
-		log.Println("Task Code Not Found : " + task.Code)
+		log.Println("Task Code Not Found : " + code)
 		taskDTO.Status = false
 		return &taskDTO, errors.New("Task Code Not Found")
 
 	}
 
-	result, err := t.Repo.Delete(task)
+	result, err := t.Repo.Delete(code)
 	if err != nil || result == false {
 		taskDTO.Status = false
 		return &taskDTO, err
 	}
 
-	log.Println("Task Delete Succesful : " + task.Code)
+	log.Println("Task Delete Succesful : " + code)
 	taskDTO.Status = true
 	return &taskDTO, nil
 
 }
 
-func (t DefaultTaskService) Update(task models.TaskEntity) (*dto.TaskDTO, error) {
+func (t DefaultTaskService) Update(code string) (*dto.TaskDTO, error) {
 	taskDTO := dto.TaskDTO{}
 
-	var entityExist, err = t.Repo.IsAlreadyTaskEntityExist(task)
+	var entityExist, err = t.Repo.IsAlreadyTaskEntityExist(code)
 	if entityExist == false {
-		log.Println("Task Code Not Found : " + task.Code)
+		log.Println("Task Code Not Found : " + code)
 		taskDTO.Status = false
 		return &taskDTO, errors.New("Task Code Not Found")
 
 	}
 
-	result, err := t.Repo.Update(task)
+	result, err := t.Repo.Update(code)
 	if err != nil || result == false {
 		taskDTO.Status = false
 		return &taskDTO, err
 	}
 
-	log.Println("Task Update Succesful : " + task.Code)
+	log.Println("Task Update Succesful : " + code)
 	taskDTO.Status = true
 	return &taskDTO, nil
 

@@ -39,8 +39,8 @@ func main() {
 	ts := api.TaskHandler{Service: services.NewTaskService(&TaskRepositoryDB)}
 	http.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 	http.HandleFunc("/api/task/create", ts.Insert)
-	http.HandleFunc("/api/task/delete", ts.Delete)
-	http.HandleFunc("/api/task/update", ts.Update)
+	http.HandleFunc("/api/task/delete/{code}", ts.Delete)
+	http.HandleFunc("/api/task/update/{code}", ts.Update)
 	http.HandleFunc("/api/task/getAll", ts.GetAllTasks)
 
 	UserRepositoryDB := repository.NewUserRepository(database)

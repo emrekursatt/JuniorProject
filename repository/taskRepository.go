@@ -14,10 +14,11 @@ type TaskRepositoryDB struct {
 
 type TaskRepository interface {
 	Insert(task models.TaskEntity) (bool, error)
-	Delete(task models.TaskEntity) (bool, error)
-	Update(task models.TaskEntity) (bool, error)
+	Delete(code string) (bool, error)
+	Update(code string) (bool, error)
 	GetAllTasks() ([]models.TaskEntity, error)
-	IsAlreadyTaskEntityExist(task models.TaskEntity) (bool, error)
+	IsAlreadyTaskEntityExist(code string) (bool, error)
+	FindTaskEntity(code string) (models.TaskEntity, error)
 }
 
 func NewTaskRepository(db *sql.DB) TaskRepositoryDB {
@@ -32,20 +33,35 @@ func (taskRepo *TaskRepositoryDB) Insert(task models.TaskEntity) (bool, error) {
 	return true, nil
 }
 
-func (taskRepo *TaskRepositoryDB) Delete(task models.TaskEntity) (bool, error) {
-	_, err := taskRepo.db.Exec("DELETE FROM "+configs.TABLE_NAME+" WHERE code=?", task.Code)
+func (taskRepo *TaskRepositoryDB) Delete(code string) (bool, error) {
+	_, err := taskRepo.db.Exec("DELETE FROM "+configs.TABLE_NAME+" WHERE code=?", code)
 	if err != nil {
 		return false, err
 	}
 	return true, nil
 }
 
-func (taskRepo *TaskRepositoryDB) Update(task models.TaskEntity) (bool, error) {
+func (taskRepo *TaskRepositoryDB) Update(code string) (bool, error) {
+	var task = FindTaskEntity(code)
+
 	_, err := taskRepo.db.Exec("UPDATE "+configs.TABLE_NAME+" SET code=? ,title=?, description=?, status=? WHERE code=?", task.Code, task.Title, task.Description, task.Status, task.Code)
 	if err != nil {
 		return false, err
 	}
 	return true, nil
+}
+
+func (taskRepo *TaskRepositoryDB) FindTaskEntity(code string) (task models.TaskEntity, err error) {
+	err = taskRepo.db.QueryRow("SELECT code , title,description , status FROM "+configs.TABLE_NAME+" WHERE code=?", code).Scan(&task.Code, &task.Title, &task.Description, &task.Status)
+	if err != nil {
+		log.Fatal(err)
+		return task, err
+	}
+	return task, nil
+
+}
+{
+
 }
 
 func (taskRepo *TaskRepositoryDB) GetAllTasks() ([]models.TaskEntity, error) {
@@ -69,10 +85,10 @@ func (taskRepo *TaskRepositoryDB) GetAllTasks() ([]models.TaskEntity, error) {
 	return tasks, nil
 }
 
-func (taskRepo *TaskRepositoryDB) IsAlreadyTaskEntityExist(task models.TaskEntity) (bool, error) {
+func (taskRepo *TaskRepositoryDB) IsAlreadyTaskEntityExist(code string) (bool, error) {
 	var count int
 	query := "SELECT COUNT(*) FROM task_table WHERE code=?"
-	err := taskRepo.db.QueryRow(query, task.Code).Scan(&count)
+	err := taskRepo.db.QueryRow(query, code).Scan(&count)
 	if err != nil {
 		log.Fatal(err)
 		return false, err
@@ -83,3 +99,4 @@ func (taskRepo *TaskRepositoryDB) IsAlreadyTaskEntityExist(task models.TaskEntit
 	return false, nil
 
 }
+
