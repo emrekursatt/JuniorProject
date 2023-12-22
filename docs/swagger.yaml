@@ -7,7 +7,7 @@ definitions:
       description:
         type: string
       status:
-        type: integer
+        type: string
       title:
         type: string
     type: object
@@ -55,14 +55,13 @@ paths:
     delete:
       consumes:
       - application/json
-      description: add by json task
+      description: delete task by code
       parameters:
-      - description: Delete Task
-        in: body
-        name: task
+      - description: Task Code
+        in: query
+        name: code
         required: true
-        schema:
-          $ref: '#/definitions/models.TaskEntity'
+        type: string
       produces:
       - application/json
       responses:
@@ -70,7 +69,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.TaskEntity'
-      summary: Add a new task
+      summary: Delete a task
       tags:
       - tasks
   /task/getAll:
@@ -94,8 +93,13 @@ paths:
     put:
       consumes:
       - application/json
-      description: add by json task
+      description: update task by code
       parameters:
+      - description: Task Code
+        in: query
+        name: code
+        required: true
+        type: string
       - description: Update Task
         in: body
         name: task
@@ -109,21 +113,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.TaskEntity'
-      summary: Add a new task
+      summary: Update a task
       tags:
       - tasks
   /user/delete:
     delete:
       consumes:
       - application/json
-      description: add by json user
+      description: delete user by userName
       parameters:
-      - description: Delete User
-        in: body
-        name: user
+      - description: Delete UserName
+        in: query
+        name: userName
         required: true
-        schema:
-          $ref: '#/definitions/models.UserEntity'
+        type: string
       produces:
       - application/json
       responses:
@@ -131,7 +134,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.UserEntity'
-      summary: Add a new user
+      summary: Delete a User
       tags:
       - users
   /user/getAll:
@@ -197,9 +200,14 @@ paths:
     put:
       consumes:
       - application/json
-      description: add by json user
+      description: update user by userName
       parameters:
-      - description: Update User
+      - description: User UserName
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Update UserName
         in: body
         name: user
         required: true
@@ -212,7 +220,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/models.UserEntity'
-      summary: Add a new user
+      summary: Update a user
       tags:
       - users
 swagger: "2.0"

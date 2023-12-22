@@ -1,7 +1,7 @@
 package configs
 
-const TABLE_NAME = "task_table"
-const USER = "user_table"
+const TASK_TABLE = "task_table"
+const USER_TABLE = "user_table"
 
 type Config struct {
 	Host     string

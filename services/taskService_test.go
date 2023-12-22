@@ -12,10 +12,10 @@ var service TaskService
 var mockRepo *repository.MockTaskRepository
 
 var TestData = []models.TaskEntity{
-	{Code: "Code 1", Title: "Title 1", Description: "Desc1", Status: 1},
-	{Code: "Code 2", Title: "Title 2", Description: "Desc2", Status: 0},
-	{Code: "Code 3", Title: "Title 3", Description: "Desc3", Status: 0},
-	{Code: "Code 4", Title: "Title 5", Description: "Desc4", Status: 1},
+	{Code: "Code 1", Title: "Title 1", Description: "Desc1", Status: "Active"},
+	{Code: "Code 2", Title: "Title 2", Description: "Desc2", Status: "Passive"},
+	{Code: "Code 3", Title: "Title 3", Description: "Desc3", Status: "Passive"},
+	{Code: "Code 4", Title: "Title 5", Description: "Desc4", Status: "Active"},
 }
 
 func setup(t *testing.T) func() {
@@ -70,8 +70,8 @@ func TestTaskService_Update(t *testing.T) {
 	for i, _ := range TestData {
 		task := TestData[i]
 		mockRepo.EXPECT().IsAlreadyTaskEntityExist(gomock.Any()).Return(true, nil).Times(1)
-		mockRepo.EXPECT().Update(task).Return(true, nil).Times(1)
-		result, err := service.Update(task)
+		mockRepo.EXPECT().Update(task.Code, task).Return(true, nil).Times(1)
+		result, err := service.Update(task.Code, task)
 
 		assert.NotEmpty(t, result)
 
@@ -88,8 +88,8 @@ func TestTaskService_Delete(t *testing.T) {
 	for i, _ := range TestData {
 		task := TestData[i]
 		mockRepo.EXPECT().IsAlreadyTaskEntityExist(gomock.Any()).Return(true, nil).Times(1)
-		mockRepo.EXPECT().Delete(task).Return(true, nil).Times(1)
-		result, err := service.Delete(task)
+		mockRepo.EXPECT().Delete(task.Code).Return(true, nil).Times(1)
+		result, err := service.Delete(task.Code)
 
 		assert.NotEmpty(t, result)
 

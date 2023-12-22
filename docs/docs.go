@@ -51,7 +51,7 @@ const docTemplate = `{
         },
         "/task/delete": {
             "delete": {
-                "description": "add by json task",
+                "description": "delete task by code",
                 "consumes": [
                     "application/json"
                 ],
@@ -61,16 +61,14 @@ const docTemplate = `{
                 "tags": [
                     "tasks"
                 ],
-                "summary": "Add a new task",
+                "summary": "Delete a task",
                 "parameters": [
                     {
-                        "description": "Delete Task",
-                        "name": "task",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.TaskEntity"
-                        }
+                        "type": "string",
+                        "description": "Task Code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -111,7 +109,7 @@ const docTemplate = `{
         },
         "/task/update": {
             "put": {
-                "description": "add by json task",
+                "description": "update task by code",
                 "consumes": [
                     "application/json"
                 ],
@@ -121,8 +119,15 @@ const docTemplate = `{
                 "tags": [
                     "tasks"
                 ],
-                "summary": "Add a new task",
+                "summary": "Update a task",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task Code",
+                        "name": "code",
+                        "in": "query",
+                        "required": true
+                    },
                     {
                         "description": "Update Task",
                         "name": "task",
@@ -145,7 +150,7 @@ const docTemplate = `{
         },
         "/user/delete": {
             "delete": {
-                "description": "add by json user",
+                "description": "delete user by userName",
                 "consumes": [
                     "application/json"
                 ],
@@ -155,16 +160,14 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Add a new user",
+                "summary": "Delete a User",
                 "parameters": [
                     {
-                        "description": "Delete User",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.UserEntity"
-                        }
+                        "type": "string",
+                        "description": "Delete UserName",
+                        "name": "userName",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -270,7 +273,7 @@ const docTemplate = `{
         },
         "/user/update": {
             "put": {
-                "description": "add by json user",
+                "description": "update user by userName",
                 "consumes": [
                     "application/json"
                 ],
@@ -280,10 +283,17 @@ const docTemplate = `{
                 "tags": [
                     "users"
                 ],
-                "summary": "Add a new user",
+                "summary": "Update a user",
                 "parameters": [
                     {
-                        "description": "Update User",
+                        "type": "string",
+                        "description": "User UserName",
+                        "name": "userName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Update UserName",
                         "name": "user",
                         "in": "body",
                         "required": true,
@@ -314,7 +324,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"

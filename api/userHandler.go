@@ -47,16 +47,15 @@ func (h UserHandler) Insert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(result)
 	w.WriteHeader(http.StatusOK)
 }
 
-// @Summary Add a new user
-// @Description add by json user
+// @Summary Delete a User
+// @Description delete user by userName
 // @Tags users
 // @Accept  json
 // @Produce  json
-// @Param   user     body    models.UserEntity     true  "Delete User"
+// @Param   userName     query    string     true  "Delete UserName"
 // @Success 200 {object}  models.UserEntity
 // @Router /user/delete [DELETE]
 func (h UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -66,18 +65,8 @@ func (h UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user models.UserEntity
-
-	err := json.NewDecoder(r.Body).Decode(&user)
-	if err != nil {
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-
-		}
-	}
-
-	result, err := h.Service.Delete(user)
+	userName := r.FormValue("userName")
+	result, err := h.Service.Delete(userName)
 	if err != nil || result.Status == false {
 		errMsg := "Internal Server Error"
 		if err != nil {
@@ -90,33 +79,32 @@ func (h UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// @Summary Add a new user
-// @Description add by json user
+// @Summary Update a user
+// @Description update user by userName
 // @Tags users
 // @Accept  json
 // @Produce  json
-// @Param   user     body    models.UserEntity     true  "Update User"
+// @Param   userName     query    string     true  "User UserName"
+// @Param   user     body    models.UserEntity     true  "Update UserName"
 // @Success 200 {object} models.UserEntity
 // @Router /user/update [PUT]
-func (h UserHandler) UpdatePassword(w http.ResponseWriter, r *http.Request) {
+func (h UserHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "PUT" {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
 
+	userName := r.FormValue("userName")
 	var user models.UserEntity
 
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-
-		}
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	result, err := h.Service.UpdatePassword(user)
+	result, err := h.Service.Update(userName, user)
 	if err != nil || result.Status == false {
 		errMsg := "Internal Server Error"
 		if err != nil {
@@ -144,7 +132,6 @@ func (h UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var users []models.UserEntity
-
 	users, err := h.Service.GetAllUsers()
 	if err != nil {
 		errMsg := "Internal Server Error"
@@ -154,7 +141,6 @@ func (h UserHandler) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, errMsg, http.StatusInternalServerError)
 		return
 	}
-
 	json.NewEncoder(w).Encode(users)
 	w.WriteHeader(http.StatusOK)
 }
@@ -195,6 +181,5 @@ func (h UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(result)
 	w.WriteHeader(http.StatusOK)
 }

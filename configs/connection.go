@@ -35,7 +35,7 @@ func CreateTaskTable(db *sql.DB, tableName string) (*sql.DB, error) {
 			"`code` VARCHAR(15) NOT NULL,\n  "+
 			"`title` VARCHAR(45) NOT NULL,\n  "+
 			"`description` VARCHAR(45) NULL,\n  "+
-			"`status` TINYINT(2) NOT NULL,\n  "+
+			"`status` VARCHAR(45) NOT NULL,\n  "+
 			"PRIMARY KEY (`id`),\n  "+
 			"UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,  "+
 			"UNIQUE INDEX `title_UNIQUE` "+

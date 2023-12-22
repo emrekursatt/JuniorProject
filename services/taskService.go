@@ -16,7 +16,7 @@ type DefaultTaskService struct {
 type TaskService interface {
 	Insert(task models.TaskEntity) (*dto.TaskDTO, error)
 	Delete(code string) (*dto.TaskDTO, error)
-	Update(task models.TaskEntity) (*dto.TaskDTO, error)
+	Update(code string, task models.TaskEntity) (*dto.TaskDTO, error)
 	GetAllTasks() ([]models.TaskEntity, error)
 }
 
@@ -75,7 +75,7 @@ func (t DefaultTaskService) Delete(code string) (*dto.TaskDTO, error) {
 
 }
 
-func (t DefaultTaskService) Update(code string) (*dto.TaskDTO, error) {
+func (t DefaultTaskService) Update(code string, task models.TaskEntity) (*dto.TaskDTO, error) {
 	taskDTO := dto.TaskDTO{}
 
 	var entityExist, err = t.Repo.IsAlreadyTaskEntityExist(code)
@@ -86,7 +86,7 @@ func (t DefaultTaskService) Update(code string) (*dto.TaskDTO, error) {
 
 	}
 
-	result, err := t.Repo.Update(code)
+	result, err := t.Repo.Update(code, task)
 	if err != nil || result == false {
 		taskDTO.Status = false
 		return &taskDTO, err
@@ -100,8 +100,11 @@ func (t DefaultTaskService) Update(code string) (*dto.TaskDTO, error) {
 
 func (t DefaultTaskService) GetAllTasks() ([]models.TaskEntity, error) {
 	tasks, err := t.Repo.GetAllTasks()
+	taskDto := dto.TaskDTO{}
 	if err != nil {
+		taskDto.Status = false
 		return tasks, err
 	}
+
 	return tasks, nil
 }

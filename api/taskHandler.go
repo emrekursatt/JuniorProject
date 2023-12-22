@@ -50,12 +50,12 @@ func (h TaskHandler) Insert(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// @Summary Add a new task
-// @Description add by json task
+// @Summary Delete a task
+// @Description delete task by code
 // @Tags tasks
 // @Accept  json
 // @Produce  json
-// @Param   task     body    models.TaskEntity     true  "Delete Task"
+// @Param   code     query    string     true  "Task Code"
 // @Success 200 {object}  models.TaskEntity
 // @Router /task/delete [DELETE]
 func (h TaskHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -65,18 +65,8 @@ func (h TaskHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var task models.TaskEntity
-
-	err := json.NewDecoder(r.Body).Decode(&task)
-	if err != nil {
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-
-		}
-	}
-
-	result, err := h.Service.Delete(task)
+	code := r.FormValue("code")
+	result, err := h.Service.Delete(code)
 	if err != nil || result.Status == false {
 		errMsg := "Internal Server Error"
 		if err != nil {
@@ -89,11 +79,12 @@ func (h TaskHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-// @Summary Add a new task
-// @Description add by json task
+// @Summary Update a task
+// @Description update task by code
 // @Tags tasks
 // @Accept  json
 // @Produce  json
+// @Param   code     query    string     true  "Task Code"
 // @Param   task     body    models.TaskEntity     true  "Update Task"
 // @Success 200 {object}  models.TaskEntity
 // @Router /task/update [PUT]
@@ -104,18 +95,16 @@ func (h TaskHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var task models.TaskEntity
+	code := r.FormValue("code")
 
+	var task models.TaskEntity
 	err := json.NewDecoder(r.Body).Decode(&task)
 	if err != nil {
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-
-		}
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	result, err := h.Service.Update(task)
+	result, err := h.Service.Update(code, task)
 	if err != nil || result.Status == false {
 		errMsg := "Internal Server Error"
 		if err != nil {
