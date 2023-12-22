@@ -27,6 +27,7 @@ func NewUserService(repo repository.UserRepository) DefaultUserService {
 
 func (u DefaultUserService) Insert(user models.UserEntity) (*dto.UserDTO, error) {
 	userDTO := dto.UserDTO{}
+	number := strconv.Itoa(user.PhoneNumber)
 	var entityExist, err = u.Repo.IsAlreadyUserEntityExist(user.UserName)
 	if entityExist {
 		userDTO.Status = false
@@ -37,7 +38,7 @@ func (u DefaultUserService) Insert(user models.UserEntity) (*dto.UserDTO, error)
 		userDTO.Status = false
 		log.Println("Username or Password or Email Not Valid : " + "User Name : " + user.UserName + " Password :" + user.Password + " Email :" + user.Email)
 		return &userDTO, errors.New("Username or Password or Email Not Valid : " + "User Name : " + user.UserName + " Password :" + user.Password + " Email :" + user.Email)
-	} else if len(strconv.Itoa(user.PhoneNumber)) != 10 {
+	} else if len(strconv.Itoa(user.PhoneNumber)) != 10 || number[0] == '0' {
 		userDTO.Status = false
 		log.Println("Please enter the telephone number with 10 digits without leading zeros.")
 		return &userDTO, errors.New("Please enter the telephone number with 10 digits without leading zeros.")
