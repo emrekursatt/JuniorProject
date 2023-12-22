@@ -27,15 +27,16 @@ The project primarily includes the following packages:
     ```
     gh repo clone emrekursatt/JuniorProject
     ```
-2. Run the project:
+
+2. Loading Dependencies:
+    ```
+    go mod tidy
+    ```
+3. Run the project:
     ```
     go run main.go
     ```
 
-## Loading Dependencies
-    ```
-    go mod tidy
-    ```
 
 
 
