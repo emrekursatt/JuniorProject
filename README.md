@@ -46,7 +46,7 @@ Create user: POST /api/user/register
 Delete user: DELETE /api/user/delete  
 Update user: PUT /api/user/update  
 Get all users: GET /api/user/getAll  
-User login: POST /api/user/login  
+
 Create task: POST /api/task/create  
 Delete task: DELETE /api/task/delete  
 Update task: PUT /api/task/update  
