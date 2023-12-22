@@ -1,14 +1,15 @@
-package services
+package tests
 
 import (
 	"github.com/emrekursatt/JuniorProject/mocks/repository"
 	"github.com/emrekursatt/JuniorProject/models"
+	"github.com/emrekursatt/JuniorProject/services"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-var service TaskService
+var service services.TaskService
 var mockRepo *repository.MockTaskRepository
 
 var TestData = []models.TaskEntity{
@@ -23,7 +24,7 @@ func setup(t *testing.T) func() {
 	defer ctx.Finish()
 
 	mockRepo = repository.NewMockTaskRepository(ctx)
-	service = NewTaskService(mockRepo)
+	service = services.NewTaskService(mockRepo)
 
 	return func() {
 		service = nil

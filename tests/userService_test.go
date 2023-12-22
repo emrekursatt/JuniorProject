@@ -1,14 +1,15 @@
-package services
+package tests
 
 import (
 	"github.com/emrekursatt/JuniorProject/mocks/repository"
 	"github.com/emrekursatt/JuniorProject/models"
+	"github.com/emrekursatt/JuniorProject/services"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-var serviceUser UserService
+var serviceUser services.UserService
 var mockRepoUser *repository.MockUserRepository
 
 var TestDataUser = []models.UserEntity{
@@ -21,7 +22,7 @@ func setupUser(t *testing.T) func() {
 	defer ctx.Finish()
 
 	mockRepoUser = repository.NewMockUserRepository(ctx)
-	serviceUser = NewUserService(mockRepoUser)
+	serviceUser = services.NewUserService(mockRepoUser)
 
 	return func() {
 		serviceUser = nil
