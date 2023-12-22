@@ -13,12 +13,12 @@ type DefaultUserService struct {
 	Repo repository.UserRepository
 }
 
+//go:generate mockgen -destination=../mocks/service/mock_userService.go -package=services github.com/emrekursatt/JuniorProject/services UserService
 type UserService interface {
 	Insert(user models.UserEntity) (*dto.UserDTO, error)
 	Delete(userName string) (*dto.UserDTO, error)
 	Update(userName string, user models.UserEntity) (*dto.UserDTO, error)
 	GetAllUsers() ([]models.UserEntity, error)
-	Login(user models.UserEntity) (*dto.UserDTO, error)
 }
 
 func NewUserService(repo repository.UserRepository) DefaultUserService {
@@ -103,8 +103,6 @@ func (u DefaultUserService) Update(userName string, user models.UserEntity) (*dt
 	return &userDTO, nil
 }
 
-//go:generate mockgen -destination=../mocks/service/mock_userService.go -package=services github.com/emrekursatt/JuniorProject/services UserService
-
 func (u DefaultUserService) GetAllUsers() ([]models.UserEntity, error) {
 	var users []models.UserEntity
 
@@ -116,17 +114,4 @@ func (u DefaultUserService) GetAllUsers() ([]models.UserEntity, error) {
 	}
 
 	return users, nil
-}
-
-func (u DefaultUserService) Login(user models.UserEntity) (*dto.UserDTO, error) {
-	userDTO := dto.UserDTO{}
-
-	var entityExist, err = u.Repo.Login(user)
-	if entityExist == false {
-		log.Println(err)
-		userDTO.Status = false
-		return &userDTO, errors.New("User Not Found")
-	}
-	userDTO.Status = true
-	return &userDTO, nil
 }

@@ -18,7 +18,6 @@ type UserRepository interface {
 	Update(userName string, user models.UserEntity) (bool, error)
 	GetAllUsers() ([]models.UserEntity, error)
 	IsAlreadyUserEntityExist(userName string) (bool, error)
-	Login(user models.UserEntity) (bool, error)
 }
 
 func NewUserRepository(db *sql.DB) UserRepositoryDB {
@@ -80,19 +79,6 @@ func (userRepo *UserRepositoryDB) IsAlreadyUserEntityExist(userName string) (boo
 	err := userRepo.db.QueryRow(query, userName).Scan(&count)
 	if err != nil {
 		log.Println(err)
-		return false, err
-	}
-	if count > 0 {
-		return true, nil
-	}
-	return false, nil
-}
-
-func (userRepo *UserRepositoryDB) Login(user models.UserEntity) (bool, error) {
-	var count int
-	query := "SELECT COUNT(*) FROM " + configs.USER_TABLE + " WHERE userName = ? AND password = ?"
-	err := userRepo.db.QueryRow(query, user.UserName, user.Password).Scan(&count)
-	if err != nil {
 		return false, err
 	}
 	if count > 0 {

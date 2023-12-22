@@ -46,7 +46,7 @@ func prometheusMiddleware(next http.Handler) http.Handler {
 
 // @title Swagger
 // @version v1
-// @description This is a sample server Petstore server.
+// @description This is a sample server Task server.
 // @host localhost:8080
 // @BasePath /api
 func main() {
@@ -86,7 +86,6 @@ func main() {
 	http.Handle("/api/user/delete", prometheusMiddleware(http.HandlerFunc(us.Delete)))
 	http.Handle("/api/user/update", prometheusMiddleware(http.HandlerFunc(us.Update)))
 	http.Handle("/api/user/getAll", prometheusMiddleware(http.HandlerFunc(us.GetAllUsers)))
-	http.Handle("/api/user/login", prometheusMiddleware(http.HandlerFunc(us.Login)))
 
 	http.Handle("/metrics", promhttp.Handler())
 
