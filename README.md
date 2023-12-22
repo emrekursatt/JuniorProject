@@ -25,7 +25,7 @@ The project primarily includes the following packages:
 
 1. Clone the project:
     ```
-    git clone https://github.com/emrekursatt/JuniorProject.git
+    gh repo clone emrekursatt/JuniorProject
     ```
 2. Run the project:
     ```
