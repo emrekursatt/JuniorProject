@@ -37,7 +37,7 @@ The project primarily includes the following packages:
     go mod tidy
     ```
 
-Before running these commands, make sure that Go is installed on your system. If Go is not installed, you can download and install it from Go's official website.
+
 
 ## API Usage
 This project provides the following APIs for user and task management:  
